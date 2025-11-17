@@ -49,6 +49,10 @@ function updateUI(user) {
 // Listen to auth state changes
 auth.onAuthStateChanged((user) => {
   updateUI(user);
+  // Close login panel when user successfully logs in
+  if (user && loginPanel && !loginPanel.classList.contains('hidden')) {
+    closeLoginPanel();
+  }
 });
 
 // Open login panel
