@@ -248,6 +248,7 @@ async function render() {
       (async function() {
         try {
           const data = await fetchForecast(place.lat, place.lon);
+          console.log(`Rendering ${place.name} med timer: ${HOURS_FROM}-${HOURS_TO}`);
           const hours = pickHours(data.properties.timeseries, selectedDayOffset, HOURS_FROM, HOURS_TO, TIMEZONE);
           
           if (!hours.length) {
