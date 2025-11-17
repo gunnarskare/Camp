@@ -7,7 +7,7 @@ import { ensureMap, setMarker, setMapClickHandler, flyTo } from './map.js';
 
 // Constants
 let HOURS_FROM = 7;
-let HOURS_TO = 14;
+let HOURS_TO = 22;
 const TIMEZONE = 'Europe/Oslo';
 const MAX_PLACES = 9;
 
@@ -385,7 +385,7 @@ if (settingsReset) {
       temp: { ...DEFAULT_THRESHOLDS.temp }
     };
     HOURS_FROM = 7;
-    HOURS_TO = 14;
+    HOURS_TO = 22;
     localStorage.setItem('hoursFrom', HOURS_FROM);
     localStorage.setItem('hoursTo', HOURS_TO);
     saveThresholds(TH);
