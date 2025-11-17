@@ -1,0 +1,18 @@
+[debug] [2025-11-17T13:12:55.751Z] ----------------------------------------------------------------------
+[debug] [2025-11-17T13:12:55.754Z] Command:       /usr/local/share/nvm/versions/node/v22.21.1/bin/node /home/codespace/nvm/current/bin/firebase login:ci
+[debug] [2025-11-17T13:12:55.754Z] CLI Version:   14.25.0
+[debug] [2025-11-17T13:12:55.754Z] Platform:      linux
+[debug] [2025-11-17T13:12:55.754Z] Node Version:  v22.21.1
+[debug] [2025-11-17T13:12:55.755Z] Time:          Mon Nov 17 2025 13:12:55 GMT+0000 (Coordinated Universal Time)
+[debug] [2025-11-17T13:12:55.755Z] Env Overrides: GITHUB_API_URL, GITHUB_API_URL
+[debug] [2025-11-17T13:12:55.755Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-11-17T13:12:55.757Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[warn] ⚠  Authenticating with a `login:ci` token is deprecated and will be removed in a future major version of `firebase-tools`. Instead, use a service account key with `GOOGLE_APPLICATION_CREDENTIALS`: https://cloud.google.com/docs/authentication/getting-started 
+[info] 
+[info] Visit this URL on this device to log in:
+[info] https://accounts.google.com/o/oauth2/auth?client_id=563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com&scope=email%20openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloudplatformprojects.readonly%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Ffirebase%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform&response_type=code&state=892786427&redirect_uri=http%3A%2F%2Flocalhost%3A9005
+[info] 
+[info] Waiting for authentication...
+[debug] [2025-11-17T13:12:56.038Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2025-11-17T13:12:56.038Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
