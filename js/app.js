@@ -357,6 +357,7 @@ if (settingsSave) {
     if (time_start && time_end) {
       const startHour = parseInt(time_start.value);
       const endHour = parseInt(time_end.value);
+      console.log('Oppdaterer tidsperiode:', { startHour, endHour, before: { HOURS_FROM, HOURS_TO } });
       if (!isNaN(startHour) && startHour >= 0 && startHour <= 23) {
         HOURS_FROM = startHour;
         localStorage.setItem('hoursFrom', startHour);
@@ -365,6 +366,7 @@ if (settingsSave) {
         HOURS_TO = endHour;
         localStorage.setItem('hoursTo', endHour);
       }
+      console.log('Etter oppdatering:', { HOURS_FROM, HOURS_TO });
     }
 
     saveThresholds(TH);
