@@ -1,0 +1,22 @@
+{
+  "name": "vaeret-agder",
+  "version": "1.0.0",
+  "description": "Weather forecast application for Agder region in Norway",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx serve ."
+  },
+  "keywords": [
+    "weather",
+    "forecast",
+    "norway",
+    "met-norway",
+    "agder"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {}
+}
+
