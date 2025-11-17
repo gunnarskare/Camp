@@ -50,8 +50,10 @@ function updateUI(user) {
 auth.onAuthStateChanged((user) => {
   updateUI(user);
   // Close login panel when user successfully logs in
-  if (user && loginPanel && !loginPanel.classList.contains('hidden')) {
-    closeLoginPanel();
+  if (user) {
+    setTimeout(() => {
+      closeLoginPanel();
+    }, 100);
   }
 });
 
@@ -66,10 +68,15 @@ if (loginBtn) {
 
 // Close login panel
 function closeLoginPanel() {
-  if (loginPanel) {
-    loginPanel.classList.add('hidden');
-    if (loginForm) loginForm.reset();
-    if (loginError) loginError.classList.add('hidden');
+  const panel = document.getElementById('loginPanel');
+  if (panel) {
+    panel.classList.add('hidden');
+  }
+  if (loginForm) {
+    loginForm.reset();
+  }
+  if (loginError) {
+    loginError.classList.add('hidden');
   }
 }
 
