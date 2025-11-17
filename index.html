@@ -37,7 +37,7 @@
       </div>
     </header>
 
-    <p class="mt-2 text-sm text-slate-600">Viser temperatur (°C), nedbør (mm) og vind (m/s) fra <strong>07:00 til 14:00</strong> (Europa/Oslo).</p>
+    <p id="timeDisplay" class="mt-2 text-sm text-slate-600">Viser temperatur (°C), nedbør (mm) og vind (m/s) fra <strong>07:00 til 14:00</strong> (Europa/Oslo).</p>
 
     <div id="alert" class="hidden mt-3 p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-900"></div>
     <section id="cards" class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></section>
@@ -54,6 +54,20 @@
         <button id="settingsClose" class="text-slate-500 hover:text-slate-700">Lukk</button>
       </header>
       <div class="p-4 space-y-6 overflow-y-auto">
+        <section>
+          <h3 class="font-medium mb-2">Tidsperiode</h3>
+          <p class="text-xs text-slate-500 mb-2">Velg hvilke timer som skal vises i værmeldingen</p>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="text-xs text-slate-600">Fra time</label>
+              <input id="time_start" type="number" min="0" max="23" value="7" class="w-full rounded-lg border border-slate-300 px-3 py-2" />
+            </div>
+            <div>
+              <label class="text-xs text-slate-600">Til time</label>
+              <input id="time_end" type="number" min="0" max="23" value="14" class="w-full rounded-lg border border-slate-300 px-3 py-2" />
+            </div>
+          </div>
+        </section>
         <section>
           <h3 class="font-medium mb-2">Nedbør (mm per time)</h3>
           <div class="grid grid-cols-3 gap-3">

@@ -6,8 +6,8 @@ import { debounce, pickHours, getPrecipPerHour, formatLocalTime } from './utils.
 import { ensureMap, setMarker, setMapClickHandler, flyTo } from './map.js';
 
 // Constants
-const HOURS_FROM = 7;
-const HOURS_TO = 14;
+let HOURS_FROM = 7;
+let HOURS_TO = 14;
 const TIMEZONE = 'Europe/Oslo';
 const MAX_PLACES = 9;
 
@@ -42,6 +42,8 @@ const wind_r = document.getElementById('wind_r');
 const temp_y = document.getElementById('temp_y');
 const temp_o = document.getElementById('temp_o');
 const temp_r = document.getElementById('temp_r');
+const time_start = document.getElementById('time_start');
+const time_end = document.getElementById('time_end');
 
 // Editor elements
 const editorPanel = document.getElementById('editorPanel');
@@ -89,6 +91,8 @@ function fillSettingsFormFromTH() {
   temp_y.value = TH.temp.yellow;
   temp_o.value = TH.temp.orange;
   temp_r.value = TH.temp.red;
+  time_start.value = HOURS_FROM;
+  time_end.value = HOURS_TO;
 }
 
 function openSettings() {
@@ -349,8 +353,21 @@ if (settingsSave) {
       }
     };
 
+    // Update time period
+    const startHour = parseInt(time_start.value);
+    const endHour = parseInt(time_end.value);
+    if (!isNaN(startHour) && startHour >= 0 && startHour <= 23) {
+      HOURS_FROM = startHour;
+      localStorage.setItem('hoursFrom', startHour);
+    }
+    if (!isNaN(endHour) && endHour >= 0 && endHour <= 23) {
+      HOURS_TO = endHour;
+      localStorage.setItem('hoursTo', endHour);
+    }
+
     saveThresholds(TH);
     closeSettings();
+    updateTimeDisplay();
     render();
   });
 }
@@ -362,8 +379,13 @@ if (settingsReset) {
       wind: { ...DEFAULT_THRESHOLDS.wind },
       temp: { ...DEFAULT_THRESHOLDS.temp }
     };
+    HOURS_FROM = 7;
+    HOURS_TO = 14;
+    localStorage.setItem('hoursFrom', HOURS_FROM);
+    localStorage.setItem('hoursTo', HOURS_TO);
     saveThresholds(TH);
     fillSettingsFormFromTH();
+    updateTimeDisplay();
     render();
   });
 }
@@ -439,11 +461,27 @@ refreshBtn.addEventListener('click', function() {
   render();
 });
 
+// Update time display
+function updateTimeDisplay() {
+  const timeDisplay = document.getElementById('timeDisplay');
+  if (timeDisplay) {
+    const formatHour = h => h.toString().padStart(2, '0') + ':00';
+    timeDisplay.innerHTML = `Viser temperatur (°C), nedbør (mm) og vind (m/s) fra <strong>${formatHour(HOURS_FROM)} til ${formatHour(HOURS_TO)}</strong> (Europa/Oslo).`;
+  }
+}
+
 // Initialize
 if (!localStorage.getItem('alertThresholds')) {
   saveThresholds(TH);
   setTimeout(openSettings, 0);
 }
 
+// Load saved time period
+const savedHoursFrom = localStorage.getItem('hoursFrom');
+const savedHoursTo = localStorage.getItem('hoursTo');
+if (savedHoursFrom !== null) HOURS_FROM = parseInt(savedHoursFrom);
+if (savedHoursTo !== null) HOURS_TO = parseInt(savedHoursTo);
+
+updateTimeDisplay();
 render();
 
