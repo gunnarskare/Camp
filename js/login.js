@@ -1,10 +1,22 @@
-// Login functionality
+// Login functionality with Firebase
 
-// Mock user database (in production, this would be a real backend)
-const VALID_USERS = [
-  { email: 'test@example.com', password: 'password123', name: 'Test User' },
-  { email: 'admin@example.com', password: 'admin123', name: 'Admin' },
-];
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyDbzkfjsCfIedBpHu62vERaN1dpxbbCCeI",
+  authDomain: "campino-2025.firebaseapp.com",
+  projectId: "campino-2025",
+  storageBucket: "campino-2025.firebasestorage.app",
+  messagingSenderId: "858885561098",
+  appId: "1:858885561098:web:4298982c728af7023a38f3",
+  measurementId: "G-Y4MBKYP7D0"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+
+// Enable persistence
+firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 
 // DOM elements
 const loginBtn = document.getElementById('loginBtn');
@@ -15,32 +27,21 @@ const loginForm = document.getElementById('loginForm');
 const loginCancel = document.getElementById('loginCancel');
 const loginError = document.getElementById('loginError');
 const userMenu = document.getElementById('userMenu');
-const userMenuBtn2 = document.getElementById('userMenuBtn');
 const logoutBtn = document.getElementById('logoutBtn');
 const userName = document.getElementById('userName');
 const menuUserName = document.getElementById('menuUserName');
 const menuUserEmail = document.getElementById('menuUserEmail');
-
-// Get current user from localStorage
-function getCurrentUser() {
-  const user = localStorage.getItem('currentUser');
-  return user ? JSON.parse(user) : null;
-}
-
-// Save user to localStorage
-function saveCurrentUser(user) {
-  localStorage.setItem('currentUser', JSON.stringify(user));
-}
+const googleLoginBtn = document.getElementById('googleLoginBtn');
+const githubLoginBtn = document.getElementById('githubLoginBtn');
 
 // Update UI based on login status
-function updateUI() {
-  const user = getCurrentUser();
-  
+function updateUI(user) {
   if (user) {
     loginBtn.classList.add('hidden');
     userMenuBtn.classList.remove('hidden');
-    userName.textContent = user.name;
-    menuUserName.textContent = user.name;
+    const displayName = user.displayName || user.email;
+    userName.textContent = displayName;
+    menuUserName.textContent = displayName;
     menuUserEmail.textContent = user.email;
   } else {
     loginBtn.classList.remove('hidden');
@@ -48,6 +49,11 @@ function updateUI() {
     userMenu.classList.add('hidden');
   }
 }
+
+// Listen to auth state changes
+auth.onAuthStateChanged((user) => {
+  updateUI(user);
+});
 
 // Open login panel
 loginBtn.addEventListener('click', () => {
@@ -66,26 +72,55 @@ function closeLoginPanel() {
 loginCancel.addEventListener('click', closeLoginPanel);
 loginOverlay.addEventListener('click', closeLoginPanel);
 
-// Handle login form submission
-loginForm.addEventListener('submit', (e) => {
+// Show error message
+function showError(message) {
+  loginError.textContent = message;
+  loginError.classList.remove('hidden');
+}
+
+// Email/Password Login
+loginForm.addEventListener('submit', async (e) => {
   e.preventDefault();
-  
+
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
-  
-  // Check credentials
-  const user = VALID_USERS.find(u => u.email === email && u.password === password);
-  
-  if (user) {
-    // Save user and update UI
-    saveCurrentUser({ email: user.email, name: user.name });
-    updateUI();
+
+  try {
+    await auth.createUserWithEmailAndPassword(email, password);
     closeLoginPanel();
-    console.log('Logg inn vellykket:', user.name);
-  } else {
-    // Show error
-    loginError.textContent = 'E-post eller passord er feil';
-    loginError.classList.remove('hidden');
+  } catch (error) {
+    if (error.code === 'auth/email-already-in-use') {
+      try {
+        await auth.signInWithEmailAndPassword(email, password);
+        closeLoginPanel();
+      } catch (signInError) {
+        showError('E-post eller passord er feil');
+      }
+    } else {
+      showError(error.message);
+    }
+  }
+});
+
+// Google Login
+googleLoginBtn.addEventListener('click', async () => {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  try {
+    await auth.signInWithPopup(provider);
+    closeLoginPanel();
+  } catch (error) {
+    showError('Google-innlogging feilet: ' + error.message);
+  }
+});
+
+// GitHub Login
+githubLoginBtn.addEventListener('click', async () => {
+  const provider = new firebase.auth.GithubAuthProvider();
+  try {
+    await auth.signInWithPopup(provider);
+    closeLoginPanel();
+  } catch (error) {
+    showError('GitHub-innlogging feilet: ' + error.message);
   }
 });
 
@@ -103,12 +138,11 @@ document.addEventListener('click', (e) => {
 });
 
 // Logout
-logoutBtn.addEventListener('click', () => {
-  localStorage.removeItem('currentUser');
-  updateUI();
-  userMenu.classList.add('hidden');
-  console.log('Logg ut vellykket');
+logoutBtn.addEventListener('click', async () => {
+  try {
+    await auth.signOut();
+    userMenu.classList.add('hidden');
+  } catch (error) {
+    console.error('Logout error:', error);
+  }
 });
-
-// Initialize UI on page load
-document.addEventListener('DOMContentLoaded', updateUI);
