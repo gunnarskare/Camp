@@ -2,3 +2,19 @@
   height: 420px;
 }
 
+/* Login Panel */
+#loginPanel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#userMenu {
+  min-width: 200px;
+}
+
+#userMenuBtn span {
+  margin-left: 0.5rem;
+}
+
+
