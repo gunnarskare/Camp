@@ -91,8 +91,8 @@ function fillSettingsFormFromTH() {
   temp_y.value = TH.temp.yellow;
   temp_o.value = TH.temp.orange;
   temp_r.value = TH.temp.red;
-  time_start.value = HOURS_FROM;
-  time_end.value = HOURS_TO;
+  if (time_start) time_start.value = HOURS_FROM;
+  if (time_end) time_end.value = HOURS_TO;
 }
 
 function openSettings() {
@@ -354,15 +354,17 @@ if (settingsSave) {
     };
 
     // Update time period
-    const startHour = parseInt(time_start.value);
-    const endHour = parseInt(time_end.value);
-    if (!isNaN(startHour) && startHour >= 0 && startHour <= 23) {
-      HOURS_FROM = startHour;
-      localStorage.setItem('hoursFrom', startHour);
-    }
-    if (!isNaN(endHour) && endHour >= 0 && endHour <= 23) {
-      HOURS_TO = endHour;
-      localStorage.setItem('hoursTo', endHour);
+    if (time_start && time_end) {
+      const startHour = parseInt(time_start.value);
+      const endHour = parseInt(time_end.value);
+      if (!isNaN(startHour) && startHour >= 0 && startHour <= 23) {
+        HOURS_FROM = startHour;
+        localStorage.setItem('hoursFrom', startHour);
+      }
+      if (!isNaN(endHour) && endHour >= 0 && endHour <= 23) {
+        HOURS_TO = endHour;
+        localStorage.setItem('hoursTo', endHour);
+      }
     }
 
     saveThresholds(TH);
