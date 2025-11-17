@@ -60,7 +60,10 @@ auth.onAuthStateChanged((user) => {
 // Open login panel
 if (loginBtn) {
   loginBtn.addEventListener('click', () => {
-    if (loginPanel) loginPanel.classList.remove('hidden');
+    if (loginPanel) {
+      loginPanel.style.display = '';
+      loginPanel.classList.remove('hidden');
+    }
     if (loginError) loginError.classList.add('hidden');
     if (loginForm) loginForm.reset();
   });
@@ -70,6 +73,7 @@ if (loginBtn) {
 function closeLoginPanel() {
   const panel = document.getElementById('loginPanel');
   if (panel) {
+    panel.style.display = 'none';
     panel.classList.add('hidden');
   }
   if (loginForm) {
@@ -168,12 +172,14 @@ logoutBtn.addEventListener('click', async () => {
 
 // Ensure loginPanel is hidden on load
 if (loginPanel) {
+  loginPanel.style.display = 'none';
   loginPanel.classList.add('hidden');
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   const panel = document.getElementById('loginPanel');
   if (panel) {
+    panel.style.display = 'none';
     panel.classList.add('hidden');
   }
   updateUI(auth.currentUser || null);
