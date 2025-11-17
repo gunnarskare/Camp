@@ -126,10 +126,18 @@ loginForm.addEventListener('submit', async (e) => {
 googleLoginBtn.addEventListener('click', async () => {
   const provider = new firebase.auth.GoogleAuthProvider();
   try {
-    await auth.signInWithPopup(provider);
-    closeLoginPanel();
+    const result = await auth.signInWithPopup(provider);
+    // Force close the panel after successful login
+    if (result && result.user) {
+      setTimeout(() => {
+        closeLoginPanel();
+      }, 200);
+    }
   } catch (error) {
-    showError('Google-innlogging feilet: ' + error.message);
+    // Only show error if it's not a popup closed by user
+    if (error.code !== 'auth/popup-closed-by-user' && error.code !== 'auth/cancelled-popup-request') {
+      showError('Google-innlogging feilet: ' + error.message);
+    }
   }
 });
 
@@ -159,7 +167,14 @@ logoutBtn.addEventListener('click', async () => {
 });
 
 // Ensure loginPanel is hidden on load
+if (loginPanel) {
+  loginPanel.classList.add('hidden');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-  if (loginPanel) loginPanel.classList.add('hidden');
+  const panel = document.getElementById('loginPanel');
+  if (panel) {
+    panel.classList.add('hidden');
+  }
   updateUI(auth.currentUser || null);
 });
